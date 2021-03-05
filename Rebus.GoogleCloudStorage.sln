@@ -14,6 +14,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rebus.GoogleCloudStorage.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rebus.GoogleCloudStorage", "Rebus.GoogleCloudStorage\Rebus.GoogleCloudStorage.csproj", "{82E8773F-8B80-44FC-8977-3DD21A199467}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rebus", "..\Rebus\Rebus\Rebus.csproj", "{5C02EB92-2EF8-4280-AAC5-28A5E7279BB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rebus.Tests.Contracts", "..\Rebus\Rebus.Tests.Contracts\Rebus.Tests.Contracts.csproj", "{B48380F8-B6B0-4A54-8E97-7290603C28F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_macOS|Any CPU = Debug_macOS|Any CPU
@@ -38,6 +42,22 @@ Global
 		{82E8773F-8B80-44FC-8977-3DD21A199467}.macOS|Any CPU.Build.0 = Release|Any CPU
 		{82E8773F-8B80-44FC-8977-3DD21A199467}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82E8773F-8B80-44FC-8977-3DD21A199467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C02EB92-2EF8-4280-AAC5-28A5E7279BB5}.Debug_macOS|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C02EB92-2EF8-4280-AAC5-28A5E7279BB5}.Debug_macOS|Any CPU.Build.0 = Debug|Any CPU
+		{5C02EB92-2EF8-4280-AAC5-28A5E7279BB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C02EB92-2EF8-4280-AAC5-28A5E7279BB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C02EB92-2EF8-4280-AAC5-28A5E7279BB5}.macOS|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C02EB92-2EF8-4280-AAC5-28A5E7279BB5}.macOS|Any CPU.Build.0 = Debug|Any CPU
+		{5C02EB92-2EF8-4280-AAC5-28A5E7279BB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C02EB92-2EF8-4280-AAC5-28A5E7279BB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B48380F8-B6B0-4A54-8E97-7290603C28F9}.Debug_macOS|Any CPU.ActiveCfg = Debug|Any CPU
+		{B48380F8-B6B0-4A54-8E97-7290603C28F9}.Debug_macOS|Any CPU.Build.0 = Debug|Any CPU
+		{B48380F8-B6B0-4A54-8E97-7290603C28F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B48380F8-B6B0-4A54-8E97-7290603C28F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B48380F8-B6B0-4A54-8E97-7290603C28F9}.macOS|Any CPU.ActiveCfg = Debug|Any CPU
+		{B48380F8-B6B0-4A54-8E97-7290603C28F9}.macOS|Any CPU.Build.0 = Debug|Any CPU
+		{B48380F8-B6B0-4A54-8E97-7290603C28F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B48380F8-B6B0-4A54-8E97-7290603C28F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,7 +13,7 @@
         <PackageTags>rebus service bus google cloud storage</PackageTags>
         <PackageDescription>Provides Google Cloud Storage data bus, subscriptions and saga audting storage for Rebus</PackageDescription>
         <PackageIcon>little_rebusbus2_copy-500x500.png</PackageIcon>
-        <RepositoryUrl>https://github.com/kendallb/Rebus.MySqlConnector</RepositoryUrl>
+        <RepositoryUrl>https://github.com/kendallb/Rebus.GoogleCloudStorage</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageId>AMain.Rebus.GoogleCloudStorage</PackageId>
         <LangVersion>9</LangVersion>

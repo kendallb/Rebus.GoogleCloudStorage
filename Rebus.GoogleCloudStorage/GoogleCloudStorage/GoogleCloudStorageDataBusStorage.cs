@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Google.Cloud.Storage.V1;
 using Polly.Retry;
@@ -15,7 +15,7 @@ namespace Rebus.GoogleCloudStorage
     /// <summary>
     /// Implementation of <see cref="IDataBusStorage"/> that stores data in Google Cloud Storage
     /// </summary>
-    public class GoogleCloudStorageDataBusStorage : IDataBusStorage
+    public class GoogleCloudStorageDataBusStorage : IDataBusStorage, IDataBusStorageManagement
     {
         private readonly StorageClient _storageClient;
         private readonly IRebusTime _rebusTime;
@@ -121,6 +121,80 @@ namespace Rebus.GoogleCloudStorage
         public async Task<Dictionary<string, string>> ReadMetadata(string id)
         {
             return await RetryCatchAsync(id, async objectName => await GetObjectMetadataAsync(objectName, true));
+        }
+
+        /// <summary>
+        /// Deletes the attachment with the given ID
+        /// </summary>
+        /// <param name="id">ID of the data object to delete</param>
+        public async Task Delete(string id)
+        {
+            await RetryCatchAsync(id, async objectName =>
+            {
+                await _storageClient.DeleteObjectAsync(_options.BucketName, objectName);
+                return true;
+            });
+        }
+
+        /// <summary>
+        /// Iterates through IDs of attachments that match the given <paramref name="readTime"/> and <paramref name="saveTime"/> criteria.
+        /// </summary>
+        /// <param name="readTime">Read time to compare</param>
+        /// <param name="saveTime">Save time to compare</param>
+        /// <returns>Enumeration of the keys matching the query</returns>
+        public IEnumerable<string> Query(TimeRange readTime = null, TimeRange saveTime = null)
+        {
+            // Get all the objects that match this topic
+            var storageObjects = _storageClient.ListObjects(_options.BucketName, _options.ObjectKeyPrefix);
+
+            // Now build the list and trim off the topic directory from the front
+            var prefixLength = _options.ObjectKeyPrefix.Length;
+            var suffixLength = _options.ObjectKeySuffix.Length;
+            var removeLength = prefixLength + suffixLength;
+            foreach (var obj in storageObjects)
+            {
+                // Find the ID of the object and ignore anything that is clearly too short
+                var name = obj.Name;
+                if (name.Length <= removeLength)
+                    continue;
+                var id = name.Substring(prefixLength, name.Length - removeLength);
+
+                // Accelerate querying without criteria
+                if (readTime == null && saveTime == null)
+                    yield return id;
+
+                // Now filter based on the metadata
+                var metadata = ReadMetadata(id).GetAwaiter().GetResult();
+                if (readTime != null)
+                {
+                    if (metadata.TryGetValue(MetadataKeys.ReadTime, out var readTimeString))
+                    {
+                        if (DateTimeOffset.TryParseExact(readTimeString, "o", CultureInfo.InvariantCulture,
+                            DateTimeStyles.RoundtripKind, out var readTimeValue))
+                        {
+                            if (!IsWithin(readTime, readTimeValue)) continue;
+                        }
+                    }
+                }
+                if (saveTime != null)
+                {
+                    if (metadata.TryGetValue(MetadataKeys.SaveTime, out var saveTimeString))
+                    {
+                        if (DateTimeOffset.TryParseExact(saveTimeString, "o", CultureInfo.InvariantCulture,
+                            DateTimeStyles.RoundtripKind, out var saveTimeValue))
+                        {
+                            if (!IsWithin(saveTime, saveTimeValue)) continue;
+                        }
+                    }
+                }
+                yield return id;
+            }
+        }
+
+        private static bool IsWithin(TimeRange timeRange, DateTimeOffset time)
+        {
+            return time >= (timeRange?.From ?? DateTimeOffset.MinValue) &&
+                   time < (timeRange?.To ?? DateTimeOffset.MaxValue);
         }
 
         /// <summary>

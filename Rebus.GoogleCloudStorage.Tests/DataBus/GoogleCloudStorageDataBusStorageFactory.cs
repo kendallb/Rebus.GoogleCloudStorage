@@ -4,7 +4,6 @@ using Rebus.Config;
 using Rebus.DataBus;
 using Rebus.Logging;
 using Rebus.Tests.Contracts.DataBus;
-using Rebus.Time;
 
 namespace Rebus.GoogleCloudStorage.Tests.DataBus
 {
@@ -42,16 +41,6 @@ namespace Rebus.GoogleCloudStorage.Tests.DataBus
         /// Fakes out the current time with a new timestamp value
         /// </summary>
         /// <param name="fakeTime">New fake time to set</param>
-        public void FakeIt(DateTimeOffset fakeTime) => _fakeRebusTime.Set(fakeTime);
-
-        /// <summary>
-        /// Class to implement fake time for mocking unit tests
-        /// </summary>
-        private class FakeRebusTime : IRebusTime
-        {
-            private DateTimeOffset? _fakeNow;
-            public DateTimeOffset Now => _fakeNow ?? DateTimeOffset.Now;
-            public void Set(DateTimeOffset newNow) => _fakeNow = newNow;
-        }
+        public void FakeIt(DateTimeOffset fakeTime) => _fakeRebusTime.SetNow(fakeTime);
     }
 }

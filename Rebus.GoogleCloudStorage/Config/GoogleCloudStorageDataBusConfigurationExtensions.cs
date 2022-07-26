@@ -50,12 +50,16 @@ namespace Rebus.Config
         /// <param name="options">Options to configure the storage bus</param>
         static void Configure(StandardConfigurer<IDataBusStorage> configurer, StorageClient storageClient, GoogleCloudStorageDataBusOptions options)
         {
-            configurer.Register(c =>
+            configurer.OtherService<GoogleCloudStorageDataBusStorage>().Register(c =>
             {
                 var rebusLoggerFactory = c.Get<IRebusLoggerFactory>();
                 var rebusTime = c.Get<IRebusTime>();
+
                 return new GoogleCloudStorageDataBusStorage(storageClient, rebusLoggerFactory, rebusTime, options);
             });
+
+            configurer.Register(c => c.Get<GoogleCloudStorageDataBusStorage>());
+            configurer.OtherService<IDataBusStorageManagement>().Register(c => c.Get<GoogleCloudStorageDataBusStorage>());
         }
     }
 }
